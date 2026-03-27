@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 # 1. Load model (Đảm bảo file .xml có khớp type="slide")
-model = mujoco.MjModel.from_xml_path('scara_robot.xml')
+model = mujoco.MjModel.from_xml_path('scene.xml')
 data = mujoco.MjData(model)
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
@@ -18,7 +18,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         # Ta nhân với 0.05 để trục trượt trong khoảng +- 5cm
         # Trừ đi 0.1 để nó hoạt động chủ yếu ở phía dưới cánh tay
        
-        position = np.array([0.0,0.0, 0., 0.0])
+        position = np.array([3.14,1.0, -0.06])
         # Gửi lệnh vào Actuator của khớp trượt (thường là index 2)
         # Kiểm tra thứ tự actuator trong file XML của bạn nhé!
         data.ctrl[:]= position
