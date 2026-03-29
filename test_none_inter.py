@@ -3,7 +3,7 @@ import mujoco.viewer
 import numpy as np
 import time
 from ik import solve_scara_ik
-
+from interpolation import interpolate_trapezoidal
 
 
 # 1. Load model (Đảm bảo file .xml có khớp type="slide")
@@ -13,7 +13,7 @@ weld_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_EQUALITY, "vaccum_plate")
 
 box_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "bos_pos")
 end_effector = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "touch_sensor_point")
-vacuum_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_EQUALITY, "vacuum_gripper")
+# vacuum_plate_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_EQUALITY, "vacuum_gripper")
 box_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object_to_pick")
 
 def get_joint_id(name):
@@ -26,6 +26,14 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
     state = -1
     waiting_duration = 0.25 
     vacuum_on = False
+    release_time = 0
+
+    #Biến cho motion profile
+    start_q = np.zeros(3)
+    target_q = np.zeros(3)
+    motion_duration = 1
+    motion_start_time = 0
+
     
     while viewer.is_running():
         print(state, data.time)
@@ -48,14 +56,14 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             if dist < 0.01: state = 1
         
         elif state == 1:
-            data.ctrl[2] = -0.06
+            data.ctrl[2] = -0.2
             dist_z = abs(data.site_xpos[end_effector][2] - obj_pos[2])
-            if dist_z < 0.005: 
+            if dist_z < 0.022: 
                 state = 2
             print("stat 1 dist: ", dist_z)
   
         elif state == 2:
-            data.eq_active[vacuum_id] = 1
+            vacuum_on = True
             print("Đã hút vật")
             state = 3
 
@@ -72,12 +80,19 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             goal = np.array([0.68, 0])
             ee_xy = data.site_xpos[end_effector][:2]
             if np.linalg.norm(ee_xy - goal) < 0.01:
+                release_time = data.time
                 state = 5
-
         elif state == 5:
-            data.eq_active[vacuum_id] = 0
+            data.ctrl[2] = -0.06
+            if data.time - release_time > 0.2:
+                print("Bắt đầu thả")
+                vacuum_on = False
 
 
+        if vacuum_on:
+            data.ctrl[3] = 20
+        else:
+            data.ctrl[3] = 0
 
 
         mujoco.mj_step(model, data)

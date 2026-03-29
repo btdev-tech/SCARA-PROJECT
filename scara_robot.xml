@@ -41,10 +41,17 @@
                                                     rgba='0 0 0 1' />
                                 
                                                 <body name="vaccum_plate" pos="0 0 -0.0065">
-                                                    <geom type="cylinder" size="0.037 0.003"
+                                                    <geom margin="0.05" gap="0.05" type="cylinder" size="0.05 0.006" solref="0.002 1" solimp="0.95 0.99 0.001"
                                                         rgba="0 0 0 1" />
-                                                    <site name="adhesion_site" type="cylinder" size="0.037 0.003"/>
                                                     <site name="touch_sensor_point" group="2" type="sphere" rgba="1 0 0 0.5" pos="0 0 -0.055" size="0.01" />
+                                                        <body name="vacuum_point">
+                                                            <geom name="p1" type="sphere" pos="0.04 0 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                         
+                                                            <geom name="p2" type="sphere" pos="0.02 0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                      
+                                                            <geom name="p3" type="sphere" pos="-0.02 0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                   
+                                                            <geom name="p4" type="sphere" pos="-0.04 0 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                 
+                                                            <geom name="p5" type="sphere" pos="-0.02 -0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                    
+                                                            <geom name="p6" type="sphere" pos="0.02 -0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>
+                                                        </body>
                                                 </body>
                                             </body>
                                         </body>
@@ -61,27 +68,25 @@
         </body>
         <body name="object_to_pick" pos="-0.55 0 0.26">
             <joint type="free" />
-            <inertial pos="0 0 0" mass="0.5" diaginertia="0.01 0.01 0.01" />
-            <geom name="box" type="box" size="0.05 0.05 0.05" solref="0.02 1" solimp="0.9 0.95 0.001" friction="1 0.005 0.0001" />
+            <geom name="box" type="box" size="0.05 0.05 0.05" solref="0.005 1" solimp="0.9 0.95 0.001" friction="2.0 2 0.005"/>
             <site name="box_pos" type="box" size="0.05 0.05 0.05"/>
         </body>
     </worldbody>
 
     <contact>
         <exclude body1="disc_end 2" body2="z_cylinder" />
-        <exclude body1="vaccum_plate" body2="object_to_pick"/>
         <exclude body1="z_cylinder" body2="object_to_pick"/>
         <exclude body1="disc_end 2" body2="object_to_pick"/>
     </contact>
-    <equality>
+    <!-- <equality>
         <weld name="vacuum_gripper" body1="vaccum_plate" body2="object_to_pick"
             active="false" solimp="0.9 0.95 0.001" solref="0.02 1" />
-    </equality>
+    </equality> -->
 
     <actuator>
         <position name="joint1" joint="joint1" kp="500" />
         <position name="joint2" joint="joint2" kp="400" />
         <position name="joint3" joint="joint3" kp="1000" />
-        <adhesion name="magnetic_gripper" body="vaccum_plate" ctrlrange="0 100" gain="50"/>
+        <adhesion name="magnetic_gripper" body="vacuum_point" ctrlrange="0 100" gain="100"/>
     </actuator>
 </mujoco>
