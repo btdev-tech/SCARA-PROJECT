@@ -22,7 +22,7 @@ j3_idx = model.jnt_qposadr[get_joint_id("joint3")]
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
     
-    k = 5
+    
     state = -1
     waiting_duration = 0.25 
     vacuum_on = False

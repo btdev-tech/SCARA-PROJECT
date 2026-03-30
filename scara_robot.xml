@@ -68,13 +68,8 @@
 
     <contact>
         <exclude body1="disc_end 2" body2="z_cylinder" />
-        <!-- <exclude body1="z_cylinder" body2="object_to_pick"/>
-        <exclude body1="disc_end 2" body2="object_to_pick"/> -->
+        
     </contact>
-    <!-- <equality>
-        <weld name="vacuum_gripper" body1="vaccum_plate" body2="object_to_pick"
-            active="false" solimp="0.9 0.95 0.001" solref="0.02 1" />
-    </equality> -->
 
     <actuator>
         <position name="joint1" joint="joint1" kp="500" />

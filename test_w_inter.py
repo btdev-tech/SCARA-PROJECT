@@ -21,7 +21,7 @@ j3_idx = model.jnt_qposadr[get_joint_id("joint3")]
 with mujoco.viewer.launch_passive(model, data) as viewer:
     
     state = -1
-    waiting_duration = 0.25 
+    waiting_duration = 0.0 
     vacuum_on = False
     
     # Biến phục vụ Motion Profile
@@ -107,7 +107,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 state = 6
 
         elif state == 6:
-            if data.time - release_time > 1.0: # Chờ 1s cho hộp hết rung
+            if data.time - release_time > 0.1: # Chờ 1s cho hộp hết rung
                 print("Bắt đầu thả")
                 vacuum_on = False
                 state = 6

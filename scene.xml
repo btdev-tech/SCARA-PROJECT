@@ -40,6 +40,9 @@
             <geom type ="box" size ="0.01 0.1 0.06"  pos="-0.1 0 0.05" rgba="0.9 0.7 0.5 1"/>
         </body>
     </worldbody>
-        
 
+    <!-- <keyframe>
+        <key_point name="home" qpos="0 0 0.1 -0.5 0 0.05 1 0 0 0" />
+    </keyframe>
+     -->
 </mujoco>
