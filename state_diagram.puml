@@ -1,0 +1,47 @@
+@startuml
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor Navy
+  FontName Arial
+}
+
+title SCARA Robot Pick and Place FSM
+
+[*] --> Idle : Khởi động
+
+state "State -1: Idle" as Idle
+state "State 0: Move XY to Object" as MoveXY
+state "State 1: Lower Z Axis" as LowerZ
+state "State 2: Vacuum On" as Grab
+state "State 3: Lift Object" as Lift
+state "State 4: Move to Goal" as MoveGoal
+state "State 5: Lower at Goal" as LowerGoal
+state "State 6: Wait for Stability" as WaitStable
+state "State 7: Reset & Randomize" as Reset
+
+Idle --> MoveXY : data.time > waiting_duration\n(Tính IK & Target Q)
+
+MoveXY --> LowerZ : t_rel >= motion_duration\n(Đã đến vị trí XY trên đầu vật)
+
+LowerZ --> Grab : dist_z < 0.005 OR t_rel >= 0.5\n(Đầu hút đã chạm vật)
+
+Grab --> Lift : vacuum_on = True\n(Kích hoạt lực hút)
+
+Lift --> MoveGoal : qpos[j3_idx] > 0.04\n(Đã nhấc vật lên đủ cao)
+
+MoveGoal --> LowerGoal : t_rel >= motion_duration\n(Đã đến vị trí đích)
+
+LowerGoal --> WaitStable : t_rel >= 0.2\n(Đã hạ vật sát mặt bàn)
+
+WaitStable --> Reset : data.time - release_time > 0.1\n(vacuum_on = False)
+
+Reset --> Idle : data.time - release_time > 0.5\n(Random x, y, quat cho vật mới)
+
+note right of Reset
+  **Hành động Random:**
+  * x, y ngẫu nhiên
+  * z = 0.26
+  * Quaternion chuẩn hóa (Unit Vector)
+end note
+
+@enduml
