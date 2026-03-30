@@ -21,7 +21,7 @@ j3_idx = model.jnt_qposadr[get_joint_id("joint3")]
 with mujoco.viewer.launch_passive(model, data) as viewer:
     
     state = -1
-    waiting_duration = 0.25 
+    waiting_duration = 0.7
     vacuum_on = False
     
     # Biến phục vụ Motion Profile
@@ -29,6 +29,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
     target_q = np.zeros(3)     # Lưu vị trí đích
     motion_duration = 0.5    # Thời gian di chuyển (giây), chỉnh tùy độ mượt
     motion_start_time = 0.0    # Mốc thời gian bắt đầu di chuyển
+    
     
     while viewer.is_running():
         step_start = time.time()
@@ -107,10 +108,25 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 state = 6
 
         elif state == 6:
-            if data.time - release_time > 1.0: # Chờ 1s cho hộp hết rung
+            if data.time - release_time > 0.1: # Chờ 1s cho hộp hết rung
                 print("Bắt đầu thả")
                 vacuum_on = False
-                state = 6
+                realease_time = data.time
+                state = 7
+        elif state == 7:
+            if data.time - release_time > 0.5:
+                x_pos = np.random.uniform(-0.55-0.13, -0.55+0.2)
+                y_pos = np.random.uniform(-0.2, 0.2)
+                
+                quat = np.random.uniform(-1, 1, size=4)
+                quat /= np.linalg.norm(quat)
+                data.qpos[3] = x_pos
+                data.qpos[4] = y_pos
+                data.qpos[5] = 0.26
+                data.qpos[6:10] = quat
+                state = -1
+        
+        
 
         # --- Logic Actuator ---
         data.ctrl[3] = 20 if vacuum_on else 0
