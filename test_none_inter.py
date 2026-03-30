@@ -2,6 +2,7 @@ import mujoco
 import mujoco.viewer
 import numpy as np
 import time
+import pyautogui
 from ik import solve_scara_ik
 from interpolation import interpolate_trapezoidal
 
@@ -22,7 +23,20 @@ j3_idx = model.jnt_qposadr[get_joint_id("joint3")]
 
 with mujoco.viewer.launch_passive(model, data) as viewer:
     
+    viewer.ui_left_width = 0
+    # 2. Ẩn thanh bên phải (Actuator Controls)
+    viewer.ui_right_width = 0
     
+    # 3. Tắt các thông số phụ hiện đè lên màn hình
+    viewer.opt.frame = mujoco.mjtFrame.mjFRAME_NONE
+    viewer.opt.label = mujoco.mjtLabel.mjLABEL_NONE
+    
+    # Nếu vẫn chưa ẩn, hãy ép thêm một lệnh phím tắt
+    import pyautogui
+    time.sleep(0.5)
+    pyautogui.press('tab')
+
+    state = 0
     state = -1
     waiting_duration = 0.25 
     vacuum_on = False
@@ -87,6 +101,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             if data.time - release_time > 0.2:
                 print("Release state")
                 vacuum_on = False
+                state =6
+        elif state == 6:
+            dâ
+
 
 
         if vacuum_on:
