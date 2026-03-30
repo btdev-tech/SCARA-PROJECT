@@ -24,8 +24,20 @@
         <body name="table" pos="-0.55 0 0.1">
             <geom type="box" size="0.2 0.2 0.1" rgba="0.8 0.6 0.4 1"/>
         </body>
-        <body name =" Goal point" pos =" 0.68 0  0.02">
-            <geom type ="box" size =" 0.1 0.1 0.02" rgba="0.9 0.7 0.5 1"/>
+
+        <!--Object-->
+        <body name="object_to_pick" pos="-0.55 0 0.26">
+                            <joint type="free" />
+                            <geom name="box" type="box" size="0.05 0.05 0.05" solref="0.005 1" solimp="0.9 0.95 0.001" friction="2.0 2 0.005"/>
+                            <site name="box_pos" type="box" size="0.05 0.05 0.05"/>
+                        </body>
+        <!--Goal-->
+        <body name =" Goal point" pos =" 0.68 0  0.01">
+            <geom type ="box" size ="0.1 0.1 0.01" rgba="0.9 0.7 0.5 1"/>
+            <geom type ="box" size ="0.1 0.01 0.06"  pos="0 -0.1 0.05" rgba="0.9 0.7 0.5 1"/>
+            <geom type ="box" size ="0.1 0.01 0.06"  pos="0 0.1 0.05" rgba="0.9 0.7 0.5 1"/>
+            <geom type ="box" size ="0.01 0.1 0.06"  pos="0.1 0 0.05" rgba="0.9 0.7 0.5 1"/>
+            <geom type ="box" size ="0.01 0.1 0.06"  pos="-0.1 0 0.05" rgba="0.9 0.7 0.5 1"/>
         </body>
     </worldbody>
         

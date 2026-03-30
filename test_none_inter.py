@@ -64,7 +64,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
   
         elif state == 2:
             vacuum_on = True
-            print("Đã hút vật")
+            print("Object is helded")
             state = 3
 
         elif state == 3:
@@ -85,7 +85,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         elif state == 5:
             data.ctrl[2] = -0.06
             if data.time - release_time > 0.2:
-                print("Bắt đầu thả")
+                print("Release state")
                 vacuum_on = False
 
 

@@ -10,8 +10,7 @@
                 <geom type="cylinder" size="0.05 0.2" rgba="1 0 0 1" />
 
                 <body name="disc_start 1" pos="0 0 0.2">
-                    <joint name="joint1" type="hinge" axis="0 0 1" range="-3.14 3.14" limited="true"
-                        damping="50" armature="0.1" />
+                    <joint name="joint1" type="hinge" axis="0 0 1" range="-3.14 3.14" limited="true" damping="50" armature="0.1" />
                     <geom type="cylinder" size="0.09 0.03" rgba="0.2 0.2 0.8 1" />
 
                     <body name="link_arm 1" pos="0.18 0 0">
@@ -21,62 +20,56 @@
                             <geom type="cylinder" size="0.09 0.03" rgba="0.2 0.2 0.8 1" />
 
                             <body name="disc_start 2" pos="0 0 0.06">
-                                <joint name="joint2" type="hinge" axis="0 0 1" range="-2.8 2.8"
-                                    limited="true" damping="50" armature="0.1" />
-                                            <geom
-                                    type="cylinder" size="0.07 0.03" rgba="0 1 0 1" />" <body
-                                    name="link_arm 2" pos="0.16 0 0">
-                                    <geom type="box" size="0.1 0.03 0.03" rgba="0 1 0 1" />" <body
-                                        name="disc_end 2" pos="0.16 0 0">
-                                        <geom type="cylinder" size="0.07 0.03" rgba="0 1 0 1" />
+                                <joint name="joint2" type="hinge" axis="0 0 1" range="-2.8 2.8" limited="true" damping="50" armature="0.1" />
+                                <geom type="cylinder" size="0.07 0.03" rgba="0 1 0 1" />
 
-                                        <body name="z_cylinder" pos="0 0 0">
-                                            <joint name="joint3" type="slide" axis="0 0 1"
-                                                range="-0.06 0.06" limited="true" damping="50"
-                                                armature="0.1" />
-                                            <geom type="cylinder" size="0.02 0.1" rgba="1 1 1 1" />
+                                    <body name="link_arm 2" pos="0.16 0 0">
+                                        <geom type="box" size="0.1 0.03 0.03" rgba="0 1 0 1" />
 
-                                            <body name="vaccum_base" pos="0 0 -0.105">
-                                                <geom type="cylinder" size='0.03 0.005'
-                                                    rgba='0 0 0 1' />
-                                
-                                                <body name="vaccum_plate" pos="0 0 -0.0065">
-                                                    <geom margin="0.05" gap="0.05" type="cylinder" size="0.05 0.006" solref="0.002 1" solimp="0.95 0.99 0.001"
-                                                        rgba="0 0 0 1" />
-                                                    <site name="touch_sensor_point" group="2" type="sphere" rgba="1 0 0 0.5" pos="0 0 -0.055" size="0.01" />
-                                                        <body name="vacuum_point">
-                                                            <geom name="p1" type="sphere" pos="0.04 0 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                         
-                                                            <geom name="p2" type="sphere" pos="0.02 0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                      
-                                                            <geom name="p3" type="sphere" pos="-0.02 0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                   
-                                                            <geom name="p4" type="sphere" pos="-0.04 0 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                 
-                                                            <geom name="p5" type="sphere" pos="-0.02 -0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                    
-                                                            <geom name="p6" type="sphere" pos="0.02 -0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>
+                                            <body name="disc_end 2" pos="0.16 0 0">
+                                                <geom type="cylinder" size="0.07 0.03" rgba="0 1 0 1" />
+
+                                                     <body name="z_cylinder" pos="0 0 0">
+                                                        <joint name="joint3" type="slide" axis="0 0 1" range="-0.06 0.06" limited="true" damping="50" armature="0.1" />
+                                                        <geom type="cylinder" size="0.02 0.1" rgba="1 1 1 1" />
+
+                                                            <body name="vaccum_base" pos="0 0 -0.105">
+                                                                <geom type="cylinder" size='0.03 0.005'
+                                                                    rgba='0 0 0 1' />
+                                                
+                                                                    <body name="vaccum_plate" pos="0 0 -0.0065">
+                                                                        <geom margin="0.05" gap="0.05" type="cylinder" size="0.05 0.006" solref="0.002 1" solimp="0.95 0.99 0.001" rgba="0 0 0 1" />
+
+                                                                        <site name="touch_sensor_point" group="2" type="sphere" rgba="1 0 0 0.5" pos="0 0 -0.055" size="0.01" />
+                                                                        <body name="vacuum_point">
+                                                                            <geom name="p1" type="sphere" pos="0.04 0 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                         
+                                                                            <geom name="p2" type="sphere" pos="0.02 0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                      
+                                                                            <geom name="p3" type="sphere" pos="-0.02 0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                   
+                                                                            <geom name="p4" type="sphere" pos="-0.04 0 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                 
+                                                                            <geom name="p5" type="sphere" pos="-0.02 -0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>                                                    
+                                                                            <geom name="p6" type="sphere" pos="0.02 -0.0346 -0.007" size="0.005" margin="0.04" gap="0.03" friction="2.0 2 0.005"/>
+                                                                        </body>
+                                                                </body>
+                                                            </body>
                                                         </body>
+
+                                                    </body>
+
                                                 </body>
+
                                             </body>
                                         </body>
-
                                     </body>
-
                                 </body>
-
                             </body>
                         </body>
-                    </body>
-                </body>
-            </body>
-        </body>
-        <body name="object_to_pick" pos="-0.55 0 0.26">
-            <joint type="free" />
-            <geom name="box" type="box" size="0.05 0.05 0.05" solref="0.005 1" solimp="0.9 0.95 0.001" friction="2.0 2 0.005"/>
-            <site name="box_pos" type="box" size="0.05 0.05 0.05"/>
-        </body>
+                        
     </worldbody>
 
     <contact>
         <exclude body1="disc_end 2" body2="z_cylinder" />
-        <exclude body1="z_cylinder" body2="object_to_pick"/>
-        <exclude body1="disc_end 2" body2="object_to_pick"/>
+        <!-- <exclude body1="z_cylinder" body2="object_to_pick"/>
+        <exclude body1="disc_end 2" body2="object_to_pick"/> -->
     </contact>
     <!-- <equality>
         <weld name="vacuum_gripper" body1="vaccum_plate" body2="object_to_pick"
