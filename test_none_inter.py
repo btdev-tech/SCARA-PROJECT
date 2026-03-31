@@ -2,6 +2,7 @@ import mujoco
 import mujoco.viewer
 import numpy as np
 import time
+import pyautogui
 from ik import solve_scara_ik
 from interpolation import interpolate_trapezoidal
 from color_dectection import dectect_color
@@ -52,6 +53,17 @@ def reset_goal_pos():
     r = np.sqrt(np.random.uniform(r_min**2, r_max**2))
     theta = np.random.uniform(-(np.pi)/2, (np.pi)/2)
     return r, theta
+    
+def random_color_obj():
+    color_name =[ "red", "green", "blue"]
+    color_map={
+        'red': [1, 0, 0, 1],
+        'green': [0, 1, 0, 1],
+        'blue': [0, 0, 1, 1]
+    }
+    object_color_name =color_name[int(np.random.uniform(0,3))]
+    object_color= color_map[object_color_name]
+    return object_color
     
 
 def get_joint_id(name):
