@@ -15,6 +15,26 @@ weld_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_EQUALITY, "vaccum_plate")
 box_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "bos_pos")
 end_effector = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "touch_sensor_point")
 box_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object_to_pick")
+Goal_point_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "Goal_point")
+
+def reset_goal_pos():
+    r_min = 0.4
+    r_max = 0.68
+    r = np.sqrt(np.random.uniform(r_min**2, r_max**2))
+    theta = np.random.uniform(-(np.pi)/2, (np.pi)/2)
+    return r, theta
+    
+def random_color_obj():
+    color_name =[ "red", "green", "blue"]
+    color_map={
+        'red': [1, 0, 0, 1],
+        'green': [0, 1, 0, 1],
+        'blue': [0, 0, 1, 1]
+    }
+    object_color_name =color_name[int(np.random.uniform(0,3))]
+    object_color= color_map[object_color_name]
+    return object_color
+    
 
 def get_joint_id(name):
     return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
@@ -29,6 +49,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
     waiting_duration = 0.5
     vacuum_on = False
     release_time = 0
+    print(data.qpos)
 
     
     while viewer.is_running():
@@ -36,7 +57,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         step_start = time.time()
 
         obj_pos = data.site_xpos[box_site_id]
-        
+        goal_pos = data.xpos[Goal_point_id]
 
         if state == -1:
 
@@ -73,10 +94,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 state = 4
             
         elif state == 4: 
-            q1, q2, q3 = solve_scara_ik(0.68, 0, 0.1) #về Goal
+            q1, q2, q3 = solve_scara_ik(goal_pos[0], goal_pos[1], 0.1) #về Goal
             data.ctrl[0], data.ctrl[1], data.ctrl[2] = q1, q2, 0.06
 
-            goal = np.array([0.68, 0])
+            goal = np.array([goal_pos[0], goal_pos[1]])
             ee_xy = data.site_xpos[end_effector][:2]
             if np.linalg.norm(ee_xy - goal) < 0.01:
                 release_time = data.time
@@ -89,9 +110,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 state = 6
         elif state == 6:
             if data.time - release_time > 0.5:
-                x_pos = np.random.uniform(-0.55-0.13, -0.55+0.13)
+                #random goal
+                r, theta = reset_goal_pos()
+                x_goal = r * np.cos(theta)
+                y_goal = r * np.sin(theta)
+                data.qpos[10] = x_goal
+                data.qpos[11] = y_goal
+
+                #random obbj
+                x_pos = np.random.uniform(-0.55-0.13, -0.55+0.1)
                 y_pos = np.random.uniform(-0.15, 0.15)
-                
                 quat = np.random.uniform(-1, 1, size=4)
                 quat /= np.linalg.norm(quat)
                 data.qpos[3] = x_pos
@@ -99,6 +127,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 data.qpos[5] = 0.26
                 data.qpos[6:10] = quat
                 state = -1
+
+                #random color
+                object_color= random_color_obj()
+                model.geom("box").rgba= object_color
         
 
 
