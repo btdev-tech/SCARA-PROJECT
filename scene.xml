@@ -32,13 +32,33 @@
                             <site name="box_pos" type="box" size="0.05 0.05 0.05"/>
                         </body>
         <!--Goal-->
-        <body name ="Goal_point" pos =" 0.68 0  0.01">
+        <body name ="Goal_point" pos =" 0.5 0.4 0.01">
             <joint type="free"/>
             <geom type ="box" size ="0.1 0.1 0.01" rgba="0.9 0.7 0.5 1"/>
             <geom type ="box" size ="0.1 0.01 0.06"  pos="0 -0.1 0.05" rgba="0.9 0.7 0.5 1"/>
             <geom type ="box" size ="0.1 0.01 0.06"  pos="0 0.1 0.05" rgba="0.9 0.7 0.5 1"/>
             <geom type ="box" size ="0.01 0.1 0.06"  pos="0.1 0 0.05" rgba="0.9 0.7 0.5 1"/>
             <geom type ="box" size ="0.01 0.1 0.06"  pos="-0.1 0 0.05" rgba="0.9 0.7 0.5 1"/>
+        </body>
+
+         <!--Goal green-->
+        <body name ="Goal_green" pos =" 0.68 0 0.01">
+            <joint type="free"/>
+            <geom type ="box" size ="0.1 0.1 0.01" rgba="0 1 0 1"/>
+            <geom type ="box" size ="0.1 0.01 0.06"  pos="0 -0.1 0.05" rgba="0 1 0 1"/>
+            <geom type ="box" size ="0.1 0.01 0.06"  pos="0 0.1 0.05" rgba="0 1 0 1"/>
+            <geom type ="box" size ="0.01 0.1 0.06"  pos="0.1 0 0.05" rgba="0 1 0 1"/>
+            <geom type ="box" size ="0.01 0.1 0.06"  pos="-0.1 0 0.05" rgba="0 1 0 1"/>
+        </body>
+
+         <!--Goal blue-->
+        <body name ="Goal_blue" pos =" 0.5 -0.4 0.01">
+            <joint type="free"/>
+            <geom type ="box" size ="0.1 0.1 0.01" rgba="0 0 1 1"/>
+            <geom type ="box" size ="0.1 0.01 0.06"  pos="0 -0.1 0.05" rgba="0 0 1 1"/>
+            <geom type ="box" size ="0.1 0.01 0.06"  pos="0 0.1 0.05" rgba="0 0 1 1"/>
+            <geom type ="box" size ="0.01 0.1 0.06"  pos="0.1 0 0.05" rgba="0 0 1 1"/>
+            <geom type ="box" size ="0.01 0.1 0.06"  pos="-0.1 0 0.05" rgba="0 0 1 1"/>
         </body>
     </worldbody>
 
