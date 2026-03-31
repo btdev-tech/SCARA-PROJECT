@@ -22,10 +22,14 @@ renderer = mujoco.Renderer(model, height=480, width=480)
 box_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "bos_pos")
 end_effector = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "touch_sensor_point")
 box_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object_to_pick")
-Goal_point_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "Goal_point")
+Goal_red = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "Goal_point_red")
+Goal_green = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "Goal_point_green")
+Goal_blue = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "Goal_point_blue")
 geom_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "box")
     
-
+red_goal=data.qpos[10:12]
+green_goal=data.qpos[17:19]
+blue_goal=data.qpos[24:26]
 def get_image():
     mujoco.mj_forward(model, data)
     renderer.update_scene(data, camera="top_view")
@@ -36,14 +40,15 @@ def get_image():
     return image
 
 def get_target_for_scara(cX, cY):
-    dx_pixel = cX - 249
-    dy_pixel = cY - 240
+
+    dx_pixel = cX - 239
+    dy_pixel = cY - 239
 
     table_size = 0.2
 
-    ratio = table_size / 480
-    obj_x_table = -0.55 - (dy_pixel * ratio)
-    obj_y_table = 0 - (dx_pixel * ratio)
+    ratio = 0.1/173
+    obj_x_table = -0.55 - (dx_pixel * ratio)
+    obj_y_table = 0 - (dy_pixel * ratio)
     return obj_x_table, obj_y_table
 
 
@@ -54,17 +59,7 @@ def reset_goal_pos():
     theta = np.random.uniform(-(np.pi)/2, (np.pi)/2)
     return r, theta
     
-def random_color_obj():
-    color_name =[ "red", "green", "blue"]
-    color_map={
-        'red': [1, 0, 0, 1],
-        'green': [0, 1, 0, 1],
-        'blue': [0, 0, 1, 1]
-    }
-    object_color_name =color_name[int(np.random.uniform(0,3))]
-    object_color= color_map[object_color_name]
-    return object_color
-    
+
 
 def get_joint_id(name):
     return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
@@ -88,8 +83,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
     
     while viewer.is_running():
+        print (red_goal, blue_goal, green_goal)
+        
         raw_frame = get_image()
-        output = dectect_color(get_image())
+        output = dectect_color(get_image(), red_goal, green_goal, blue_goal)
         if output is not None:
             results, debug_frame = output
             cv2.imshow("Camera View", debug_frame)
@@ -97,9 +94,6 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             # Nếu lỡ bị None, hiển thị khung hình trống hoặc cũ để không crash
             cv2.imshow("Camera View", raw_frame)
 
-
-        
-   
         
         print(state, data.time)
         
@@ -107,14 +101,12 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         if state == -1:
             target_obj = None
-            state = 0
-
-
-        if len(results) > 0 and target_obj is None:
+        
+        if len(results) > 0 and target_obj is None and data.time > waiting_duration + release_time:
             target_obj = results[0]
-
-        obj_x, obj_y = get_target_for_scara(target_obj["center"][0], target_obj["center"][1])
-        obj_pos = [obj_x, obj_y, 0.26]
+            obj_x, obj_y = get_target_for_scara(target_obj["center"][0], target_obj["center"][1])
+            obj_pos = [obj_x, obj_y, 0.26]
+            state = 0
   
         if state == 0:
             q1, q2, q3 = solve_scara_ik(obj_x, obj_y, 0.1) #Giữ độ cao 0.1
@@ -174,7 +166,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 # data.qpos[11] = y_goal
 
                 x_pos = np.random.uniform(-0.55-0.13, -0.55+0.1)
-                y_pos = np.random.uniform(-0.15, 0.15)
+                y_pos = np.random.uniform(-0.13, 0.13)
                 quat = np.random.uniform(-1, 1, size=4)
                 quat /= np.linalg.norm(quat)
                 data.qpos[3] = x_pos
@@ -186,8 +178,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
                 model.geom_rgba[geom_id] = random_color
 
                 state = -1
-        
-
+                release_time += 0.8
 
         if vacuum_on:
             data.ctrl[3] = 20
