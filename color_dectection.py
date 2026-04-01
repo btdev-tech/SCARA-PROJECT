@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import mujoco
 
 def dectect_color(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -22,19 +23,19 @@ def dectect_color(frame):
     mask4 = cv2.inRange(hsv, lower_blue, upper_blue)
 
     mask = mask1 + mask2 + mask3 + mask4
-    cv2.imshow("Combined Mask", mask) # Xem OpenCV có "thấy" cái hộp đỏ không
+    cv2.imshow("Combined Mask", mask) 
     cv2.waitKey(1)
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     ## RETR_EXTERNAL, (RETR_TREE, RETR_CCOMP)=>Hierarchy
     ## Hierachy: [Next, Previous, First_Child, Parent]: Use for complex shape
     
     results= [] #color, x, y
-    threshould = 500
+    threshold = 500
     goal_pos = []
 
     for cnt in contours:
         area = cv2.contourArea(cnt)
-        if area > threshould:
+        if area > threshold:
             #Centroid
             M = cv2.moments(cnt)
             if M["m00"] != 0:
@@ -44,13 +45,13 @@ def dectect_color(frame):
                 label = "UnKnown"
                 if mask1[cY, cX] > 0 or mask2[cY, cX] > 0:
                     label = "Red"
-                    goal_pos = [0.68, 0,  0.01]
+                    goal_pos = [0.68, 0, 0.01]
                 elif mask3[cY, cX] > 0:
                     label = "Green"
-                    goal_pos = [0.48, 0.4,  0.01]
+                    goal_pos = [0.48, 0.4, 0.01]
                 elif mask4[cY, cX] > 0:
                     label = "Blue"
-                    goal_pos = [0.48, -0.4,  0.01]
+                    goal_pos = [0.48, -0.4, 0.01]
                 
                 results.append({"color": label, "center": [cX, cY], "area": area, "goal_pos": goal_pos})
 

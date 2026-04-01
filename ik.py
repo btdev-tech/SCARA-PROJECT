@@ -15,9 +15,7 @@ def solve_scara_ik(x, y, z_target):
     # 2. joint 1 (q1) - Shoulder
     q1 = np.arctan2(y, x) - np.arctan2(L2 * np.sin(q2), L1 + L2 * np.cos(q2))
     
-    # 3. Tính khớp 3 (z) - Trục Slide
-    # Lưu ý: Robot của bạn cao khoảng 0.48m, vật ở 0.3m. 
-    # q3 trong MuJoCo là độ dời so với vị trí mặc định của khớp slide.
-    q3 = z_target - 0.40  # Điều chỉnh offset tùy theo vị trí home của khớp
+    # 3. joint 3 (z) - Slider
+    q3 = z_target - 0.40 
     
     return q1, q2, q3
