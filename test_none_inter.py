@@ -11,7 +11,7 @@ import cv2
 
 
 
-
+ 
 # 1. Load model (Đảm bảo file .xml có khớp type="slide")
 model = mujoco.MjModel.from_xml_path('scene.xml')
 data = mujoco.MjData(model)
