@@ -83,7 +83,6 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
     
     while viewer.is_running():
-        print (red_goal, blue_goal, green_goal)
         
         raw_frame = get_image()
         output = dectect_color(get_image(), red_goal, green_goal, blue_goal)
@@ -132,7 +131,6 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         elif state == 3:
             data.ctrl[2] = 0.06
-            ##idx cua j3 trong qpos
             if data.qpos[j3_idx] > 0.05:
                 state = 4
             
@@ -151,20 +149,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             if np.linalg.norm(ee_xy - goal) < 0.01:
                 release_time = data.time
                 state = 5
+
         elif state == 5:
             data.ctrl[2] = -0.06
             if data.time - release_time > 0.2:
                 print("Release state")
                 vacuum_on = False
                 state = 6
+
         elif state == 6:
             if data.time - release_time > 0.5:
-                # r, theta = reset_goal_pos()
-                # x_goal = r * np.cos(theta)
-                # y_goal = r * np.sin(theta)
-                # data.qpos[10] = x_goal
-                # data.qpos[11] = y_goal
-
                 x_pos = np.random.uniform(-0.55-0.13, -0.55+0.1)
                 y_pos = np.random.uniform(-0.13, 0.13)
                 quat = np.random.uniform(-1, 1, size=4)

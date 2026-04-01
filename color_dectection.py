@@ -30,12 +30,12 @@ def dectect_color(frame, red_goal_pos, green_goal_pos, blue_goal_pos):
     ## Hierachy: [Next, Previous, First_Child, Parent]: Use for complex shape
     
     results= [] #color, x, y
-    threshould = 500
+    threshold = 500
     goal_pos = []
 
     for cnt in contours:
         area = cv2.contourArea(cnt)
-        if area > threshould:
+        if area > threshold:
             #Centroid
             M = cv2.moments(cnt)
             if M["m00"] != 0:
