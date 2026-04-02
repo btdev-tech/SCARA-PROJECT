@@ -30,7 +30,7 @@ $$\cos(\theta_2) = \frac{x^2 + y^2 - L_1^2 - L_2^2}{2L_1L_2}$$
 $$\theta_2 = \arccos\left(\text{clip}\left(\frac{x^2 + y^2 - L_1^2 - L_2^2}{2L_1L_2}, -1.0, 1.0\right)\right)$$
 
 **Solving for Joint 1 ($\theta_1$):**
-$$\theta_1 = \operatorname{atan2}(y, x) - \operatorname{atan2}(L_2 \sin(\theta_2), L_1 + L_2 \cos(\theta_2))$$
+$$\theta_1 = {atan2}(y, x) - {atan2}(L_2 \sin(\theta_2), L_1 + L_2 \cos(\theta_2))$$
 
 **Joint 3 ($z$):**
 The vertical axis is linear (prismatic). It is calculated by a simple offset from the target height:
@@ -54,7 +54,7 @@ $$obj\_y = 0 - (cY - 239) \times \frac{0.1}{173}$$
 
 ---
 
-## 🤖 Control Logic (Finite State Machine)
+##  Control Logic (Finite State Machine)
 
 The robot operates as a sequential process to ensure safety and precision:
 
@@ -68,4 +68,3 @@ The robot operates as a sequential process to ensure safety and precision:
 | **MOVE_TO_GOAL** | Navigates to the specific colored bin. | Distance to goal $< 0.01\text{m}$. |
 | **RESET** | Teleports the block back to a random spot. | Time $> 0.5\text{s}$. |
 
--
