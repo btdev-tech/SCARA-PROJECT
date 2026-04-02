@@ -1,47 +1,59 @@
 @startuml
+title SCARA Robot Pick-and-Place State Machine
 skinparam state {
-  BackgroundColor LightBlue
-  BorderColor Navy
-  FontName Arial
+  RoundCorner 20
+  BackgroundColor #F1F8E9
+  BorderColor #2E7D32
+}
+[*] --> Idle : System Start
+Idle : state = -1
+Idle : target_obj = None
+
+state "Detection" as State0 {
+    State0 : state = 0
+    State0 : Move to Object XY
+    State0 : Z-axis = 0.06 (Safety Height)
 }
 
-title SCARA Robot Pick and Place FSM
+state "Descending" as State1 {
+    State1 : state = 1
+    State1 : data.ctrl[2] = -0.2 (Down)
+}
 
-[*] --> Idle : Khởi động
+state "Grasping" as State2 {
+    State2 : state = 2
+    State2 : vacuum_on = True
+}
 
-state "State -1: Idle" as Idle
-state "State 0: Move XY to Object" as MoveXY
-state "State 1: Lower Z Axis" as LowerZ
-state "State 2: Vacuum On" as Grab
-state "State 3: Lift Object" as Lift
-state "State 4: Move to Goal" as MoveGoal
-state "State 5: Lower at Goal" as LowerGoal
-state "State 6: Wait for Stability" as WaitStable
-state "State 7: Reset & Randomize" as Reset
+state "Lifting" as State3 {
+    State3 : state = 3
+    State3 : data.ctrl[2] = 0.06 (Up)
+}
 
-Idle --> MoveXY : data.time > waiting_duration\n(Tính IK & Target Q)
+state "Moving to Goal" as State4 {
+    State4 : state = 4
+    State4 : Move to Goal XY
+}
 
-MoveXY --> LowerZ : t_rel >= motion_duration\n(Đã đến vị trí XY trên đầu vật)
+state "Releasing" as State5 {
+    State5 : state = 5
+    State5 : data.ctrl[2] = -0.06 (Lower to Goal)
+    State5 : vacuum_on = False
+}
 
-LowerZ --> Grab : dist_z < 0.005 OR t_rel >= 0.5\n(Đầu hút đã chạm vật)
+state "Reset Environment" as State6 {
+    State6 : state = 6
+    State6 : Randomize Object Pos & Color
+}
 
-Grab --> Lift : vacuum_on = True\n(Kích hoạt lực hút)
-
-Lift --> MoveGoal : qpos[j3_idx] > 0.04\n(Đã nhấc vật lên đủ cao)
-
-MoveGoal --> LowerGoal : t_rel >= motion_duration\n(Đã đến vị trí đích)
-
-LowerGoal --> WaitStable : t_rel >= 0.2\n(Đã hạ vật sát mặt bàn)
-
-WaitStable --> Reset : data.time - release_time > 0.1\n(vacuum_on = False)
-
-Reset --> Idle : data.time - release_time > 0.5\n(Random x, y, quat cho vật mới)
-
-note right of Reset
-  **Hành động Random:**
-  * x, y ngẫu nhiên
-  * z = 0.26
-  * Quaternion chuẩn hóa (Unit Vector)
-end note
+' Transitions
+Idle -right-> State0 : Results detected \n& time > release_time
+State0 -right-> State1 : Distance XY < 0.01m
+State1 -right-> State2 : Distance Z < 0.022m
+State2 --> State3 : Instant transition
+State3 -left-> State4 : Joint 3 (Z) > 0.05m
+State4 -left-> State5 : Distance to Goal < 0.01m
+State5 -left-> State6 : Time > 0.2s
+State6 -up-> Idle : Time > 0.5s
 
 @enduml

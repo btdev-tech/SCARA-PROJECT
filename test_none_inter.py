@@ -4,20 +4,13 @@ import numpy as np
 import time
 import pyautogui
 from ik import solve_scara_ik
-from interpolation import interpolate_trapezoidal
 from color_dectection import dectect_color
-import pyautogui
 import cv2
 
-
-
-
-# 1. Load model (Đảm bảo file .xml có khớp type="slide")
 model = mujoco.MjModel.from_xml_path('scene.xml')
 data = mujoco.MjData(model)
 
 renderer = mujoco.Renderer(model, height=480, width=480)
-
 
 box_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "bos_pos")
 end_effector = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "touch_sensor_point")
@@ -52,14 +45,6 @@ def get_target_for_scara(cX, cY):
     return obj_x_table, obj_y_table
 
 
-def reset_goal_pos():
-    r_min = 0.4
-    r_max = 0.68
-    r = np.sqrt(np.random.uniform(r_min**2, r_max**2))
-    theta = np.random.uniform(-(np.pi)/2, (np.pi)/2)
-    return r, theta
-    
-
 
 def get_joint_id(name):
     return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
@@ -70,6 +55,8 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
     pyautogui.press('h')
     viewer.opt.frame = mujoco.mjtFrame.mjFRAME_NONE
     viewer.opt.label = mujoco.mjtLabel.mjLABEL_NONE
+
+    
     state = -1
     waiting_duration = 0.1
     vacuum_on = False
