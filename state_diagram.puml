@@ -46,7 +46,6 @@ state "Reset Environment" as State6 {
     State6 : Randomize Object Pos & Color
 }
 
-' Transitions
 Idle -right-> State0 : Results detected \n& time > release_time
 State0 -right-> State1 : Distance XY < 0.01m
 State1 -right-> State2 : Distance Z < 0.022m
