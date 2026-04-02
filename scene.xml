@@ -4,7 +4,7 @@
     <statistic center="0.3 0 0.4" extent="1"/> <!-- This is to change view camera position -->
 
     <visual>
-        <headlight diffuse="1 1 1" ambient="0.5 0.5 0.5" specular="0 0 0"/>
+        <headlight diffuse="0.6 0.6 0.6" ambient="0.5 0.5 0.5" specular="0 0 0"/>
         <rgba haze="0.15 0.25 0.35 1"/>
         <global azimuth="120" elevation="-20"/>
     </visual>
@@ -33,7 +33,6 @@
         </body>
         <!--Goal-->
         <body name ="Goal_point_red" pos ="0.68 0 0.01">
-            <joint type="free"/>
             <geom type ="box" size ="0.1 0.1 0.01" rgba="1 0 0 1"/> 
             <geom type ="box" size ="0.1 0.01 0.06" pos="0 -0.1 0.05" rgba="1 0 0 0.5"/> 
             <geom type ="box" size ="0.1 0.01 0.06" pos="0 0.1 0.05" rgba="1 0 0 0.5"/>
@@ -42,7 +41,6 @@
         </body>
 
         <body name ="Goal_point_green" pos ="0.48 0.4 0.01">
-            <joint type="free"/>
             <geom type ="box" size ="0.1 0.1 0.01" rgba="0 1 0 1"/> 
             <geom type ="box" size ="0.1 0.01 0.06" pos="0 -0.1 0.05" rgba="0 1 0 0.5"/>
             <geom type ="box" size ="0.1 0.01 0.06" pos="0 0.1 0.05" rgba="0 1 0 0.5"/>
@@ -51,7 +49,6 @@
         </body>
 
         <body name ="Goal_point_blue" pos ="0.48 -0.4 0.01">
-            <joint type="free"/>
             <geom type ="box" size ="0.1 0.1 0.01" rgba="0 0 1 1"/> 
             <geom type ="box" size ="0.1 0.01 0.06" pos="0 -0.1 0.05" rgba="0 0 1 0.5"/>
             <geom type ="box" size ="0.1 0.01 0.06" pos="0 0.1 0.05" rgba="0 0 1 0.5"/>

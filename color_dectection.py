@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-import mujoco
 
-def dectect_color(frame, red_goal_pos, green_goal_pos, blue_goal_pos):
+
+def dectect_color(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     lower_red1 = np.array([0, 50, 50])
@@ -26,8 +26,6 @@ def dectect_color(frame, red_goal_pos, green_goal_pos, blue_goal_pos):
     cv2.imshow("Combined Mask", mask) 
     cv2.waitKey(1)
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    ## RETR_EXTERNAL, (RETR_TREE, RETR_CCOMP)=>Hierarchy
-    ## Hierachy: [Next, Previous, First_Child, Parent]: Use for complex shape
     
     results= [] #color, x, y
     threshold = 500
@@ -45,17 +43,17 @@ def dectect_color(frame, red_goal_pos, green_goal_pos, blue_goal_pos):
                 label = "UnKnown"
                 if mask1[cY, cX] > 0 or mask2[cY, cX] > 0:
                     label = "Red"
-                    goal_pos = red_goal_pos
+                    goal_pos = [0.68, 0, 0.01]
                 elif mask3[cY, cX] > 0:
                     label = "Green"
-                    goal_pos = green_goal_pos
+                    goal_pos = [0.48, 0.4, 0.01]
                 elif mask4[cY, cX] > 0:
                     label = "Blue"
-                    goal_pos = blue_goal_pos
+                    goal_pos = [0.48, -0.4, 0.01]
                 
                 results.append({"color": label, "center": [cX, cY], "area": area, "goal_pos": goal_pos})
 
-                # 3. Vẽ lên frame để quan sát (Debug)
+                
                 cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
                 cv2.putText(frame, label, (cX - 20, cY - 20), 
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
