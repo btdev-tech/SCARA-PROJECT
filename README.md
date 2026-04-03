@@ -36,6 +36,7 @@ $$\theta_1 = {atan2}(y, x) - {atan2}(L_2 \sin(\theta_2), L_1 + L_2 \cos(\theta_2
 The vertical axis is linear (prismatic). It is calculated by a simple offset from the target height:
 $$q_3 = z_{target} - 0.40$$
 
+![Inverse Kinematics Visualize](./figs/inverse-kinematics-02-solutions.png)
 
 
 ### 2. Computer Vision & Coordinate Mapping

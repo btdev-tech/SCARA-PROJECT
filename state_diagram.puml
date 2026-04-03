@@ -9,39 +9,39 @@ skinparam state {
 Idle : state = -1
 Idle : target_obj = None
 
-state "Detection" as State0 {
+state "DETECTION" as State0 {
     State0 : state = 0
     State0 : Move to Object XY
     State0 : Z-axis = 0.06 (Safety Height)
 }
 
-state "Descending" as State1 {
+state "DESCENDING" as State1 {
     State1 : state = 1
     State1 : data.ctrl[2] = -0.2 (Down)
 }
 
-state "Grasping" as State2 {
+state "GRASP" as State2 {
     State2 : state = 2
     State2 : vacuum_on = True
 }
 
-state "Lifting" as State3 {
+state "LIFT_OBJ" as State3 {
     State3 : state = 3
     State3 : data.ctrl[2] = 0.06 (Up)
 }
 
-state "Moving to Goal" as State4 {
+state "MOVE_TO_GOAL" as State4 {
     State4 : state = 4
     State4 : Move to Goal XY
 }
 
-state "Releasing" as State5 {
+state "LOWER_AT_GOAL" as State5 {
     State5 : state = 5
     State5 : data.ctrl[2] = -0.06 (Lower to Goal)
     State5 : vacuum_on = False
 }
-
-state "Reset Environment" as State6 {
+    
+state "WAIT_FOR_STABILITY" as State6 {
     State6 : state = 6
     State6 : Randomize Object Pos & Color
 }
